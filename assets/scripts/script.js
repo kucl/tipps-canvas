@@ -52,7 +52,7 @@ function drawBitmap()
         // Can you figure out how to crop the image?
         ctx.drawImage(img, 0, 0);
     }
-    img.src = "assets/images/potter.jpg"; // Or image of your choosing
+    img.src = "assets/images/potter.png"; // Or image of your choosing
 
     // 2-2: Apply a filter
     // Some example functions: blur(<len>), grayscale(%), sepia(%)
