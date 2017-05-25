@@ -1,62 +1,140 @@
-window.onload = function() {
-    
+window.onload = function()
+{    
     var c = document.getElementById("main");
-    window.ctx = c.getContext("2d");
-    
+    ctx = c.getContext("2d");
+
     // 1-0: GRAPHICS
-    // Uncomment this to see
-    //draw();
+    // draw(); // Uncomment this, then recomment
+
+    // 2-0: EXTERNAL GRAPHICS MANIPULATION
+    // drawBitmap(); // Uncomment this, then recomment
     
-    // 2-0: ANIMATION
-    // Uncomment this and re-comment Part 1 to see
-    //animate();
-    
+    // 3-0: ANIMATION
+    // animate(); // Uncomment this
+
+    // 4-0: INTERACTION
+    // Make sure animate() is uncommented
+    // Go back to your spaceship drawing function (or mine)
+    // and apply the "colour" variable appropriately
+    window.addEventListener("keydown", onKeyDown, false);
+
 } // window.onload
 
 
 
 // Let's create a draw function for the canvas
-function draw() {
+function draw()
+{    
+    // 1-2: My spaceship is drawn facing up, so I want it to face right
+    // ctx.translate(150,0);
+    // ctx.rotate(90*Math.PI/180);
     
-    // 2-2: My spaceship is drawn facing up, so I want it to face right
-    // window.ctx.translate(150,0);
-    // window.ctx.rotate(90*Math.PI/180);
-    
-    // 2-1: Create a drawSpaceShip() function that draws your spaceship
+    // 1-1: Complete the drawSpaceShip() function
     drawSpaceShip();
     // Or cheat and use mine:
     // drawKatiesSpaceShip();
+
+    // 1-2: Add a background
+    // Can you figure out how?
+    // Hint: You may need to do this before drawing the spaceship ...
+}
+
+
+
+// Let's try external graphics manipulation
+function drawBitmap()
+{
+    // 2-1: Load in and draw the image
+    var img = new Image();
+    img.onload = function () {
+        // What happens if you set the first two parameters to 100, 100 ?
+        // What happens if you set the next two to 100,100 ?
+        // Can you figure out how to crop the image?
+        ctx.drawImage(img, 0, 0);
+    }
+    img.src = "assets/images/potter.jpg"; // Or image of your choosing
+
+    // 2-2: Apply a filter
+    // Some example functions: blur(<len>), grayscale(%), sepia(%)
+    // ctx.filter = "contrast(25)";
+
+    // 2-3: Apply a transformation
+    // ctx.transform(1,1,0,1,0,0);
+    // What happens when you change these values?
 }
 
 
 var flipped = 0;
-var xOrig = 0;
+var xOrig = 0; // Make sure this is the true origin of your drawing
+var colour = "black";
 
 // Let's animate!
-function animate() {
-    
+function animate()
+{    
     // Always clear the canvas after drawing each frame
-    window.ctx.clearRect(0, 0, 640, 480);
+    // Why is it 640, 480?
+    ctx.clearRect(0, 0, 640, 480);
     
-    // Draw here, including conditionals:
-    
-    // Let's rotate just for fun
-    // My spaceship is drawn facing up, so I want it to face right
-    if ( flipped != 1) {
-        window.ctx.translate(150+xOrig,0);
-        window.ctx.rotate(90*Math.PI/180);
-        
-        flipped = 1;
-    }
-    
-    // Draw it
+    // Draw here:
     drawSpaceShip();
     
     // Move it
-    window.ctx.translate(0,xOrig-2); // reversed bc translation
+    ctx.translate(0, xOrig+2);
+    // BUT, if using my spaceship, reverse b/c of transformations
+    // ctx.translate(0, xOrig-2); 
     
     // This will run animate() every 33 ms
     setTimeout(animate, 33);
+
+    // 3-1: Boundary detection
+    // Can you figure out how to send the spaceship back the way it came 
+    // when it hits either edge?
+    // Hint: Based on the x position of the object and the w of the canvas
+}
+
+
+// Interact with keyboard press
+function onKeyDown(e)
+{
+    if ( e.keyCode == 32 ) { // Space bar
+        if ( colour == "black" )
+            colour = "cyan";
+        else
+            colour = "black";
+    }
+}
+
+
+// Draw your own awesome spaceship
+function drawSpaceShip()
+{
+    // 1-1: Use vector drawing methods to create a ship
+    // Here's some key drawing methods and properties from the API:
+
+    ctx.beginPath();
+
+    // ctx.arc()
+    // ctx.rect, ctx.fillRect()
+    // ctx.moveTo(), ctx.lineTo()
+
+    // ctx.fillStyle, ctx.fill()
+    // ctx.strokeStyle, ctx.stroke()
+
+    // 1-2: Can you create any of thse?
+    // Half-circle or pie slice
+    // Shape drawn with a path, e.g., triangle
+    // A diamond or star
+
+    // 1-3: Can you figure out how to apply gradients?
+
+    // You can cheeat and use mine:
+    // drawKatiesSpaceShip();
+
+    ctx.closePath();
+
+    // 4-1: Change colour on keypress
+    // Use the "colour" variable
+    // Note: You may need to do this elsewhere ...
 }
 
 
@@ -64,7 +142,7 @@ function animate() {
 function drawKatiesSpaceShip()
 {
     // Draw ship base
-    var body = window.ctx;
+    var body = ctx;
     var size = 150;
     
     
@@ -201,5 +279,15 @@ function drawKatiesSpaceShip()
     body.lineWidth = size/15;
     body.stroke();
     body.fill();
+
+
+    // Face right
+
+    if ( flipped == 0 ) {
+        ctx.translate(150+xOrig,0);
+        ctx.rotate(90*Math.PI/180);
+
+        flipped = 1;
+    }
     
 }
